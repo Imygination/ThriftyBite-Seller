@@ -1,6 +1,9 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import ProductCard from "../components/ProductCard";
+import { useState } from "react";
 
 function ProfilePage() {
+    const [products, setProducts] = useState(["","","","","","","",""])
     return (
         <>
             <View style={styles.header}>
@@ -26,8 +29,15 @@ function ProfilePage() {
                     </Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.content}>
-            </View>
+            <ScrollView style={styles.content}>
+                {products.map((el, index) => {
+                    return (
+                        <ProductCard
+                        key={index}
+                        />
+                    )
+                })}
+            </ScrollView>
         </>
     );
 }
@@ -35,7 +45,8 @@ function ProfilePage() {
 const styles = StyleSheet.create({
     header: {
         // backgroundColor: "#5db075",
-        flex: 1,
+        // flex: 1,
+        marginBottom: 10
     },
     navbar: {
         backgroundColor: "#5db075",
@@ -84,7 +95,8 @@ const styles = StyleSheet.create({
         color: "white"
     },
     content: {
-        flex: 2
+        // flex: 2
+        marginTop: 10
     }
 })
 
