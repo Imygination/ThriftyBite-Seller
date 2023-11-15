@@ -54,12 +54,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         width: "100%",
         flexDirection: "row",
-        justifyContent: "space-around",
-        borderTopColor: "transparent",
-        borderEndColor: "transparent",
-        borderStartColor: "transparent",
-        borderBottomColor: "white",
-        borderWidth: 2,
         paddingBottom: 9
     },
     navItem: {
