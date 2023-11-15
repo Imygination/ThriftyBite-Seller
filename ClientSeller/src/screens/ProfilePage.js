@@ -23,8 +23,8 @@ function ProfilePage() {
                 <Text style={styles.subTitle}>
                     Alamat toko: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
                 </Text>
-                <TouchableOpacity>
-                    <Text style={styles.addButton}>
+                <TouchableOpacity style={styles.addButton}>
+                    <Text style={styles.buttonText}>
                         Add Product
                     </Text>
                 </TouchableOpacity>
@@ -84,14 +84,16 @@ const styles = StyleSheet.create({
     },
     addButton:{
         marginTop: 20,
-        textAlign: "center",
         alignSelf: "center",
-        fontSize: 20,
-        fontWeight: "bold",
         backgroundColor: "#5db075",
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 50,
+    },
+    buttonText: {
+        fontSize: 20,
+        fontWeight: "bold",
+        textAlign: "center",
         color: "white"
     },
     content: {
