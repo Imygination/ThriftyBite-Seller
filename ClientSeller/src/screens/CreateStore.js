@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput,StyleSheet, TouchableOpacity } from 'react-native';
 
 function CreateStore({ navigation }) {
   const [name, setName] = useState('');
@@ -7,7 +7,7 @@ function CreateStore({ navigation }) {
   const [location, setLocation] = useState('');
 
   const handleCreate = () => {
-    console.log('Create Food...');
+    console.log('Create Store...');
     navigation.navigate('CreateFood');
   };
 
@@ -19,25 +19,38 @@ function CreateStore({ navigation }) {
         </TouchableOpacity>
         <Text style={styles.title}>Create Store</Text>
       </View>
+      <View style={styles.formFlex}>
       <TextInput
         style={styles.input}
         placeholder="Name"
         value={name}
         onChangeText={(text) => setName(text)}
+        placeholderTextColor="#aaa" 
       />
       <TextInput
         style={styles.input}
         placeholder="Address"
         value={address}
         onChangeText={(text) => setAddress(text)}
+        placeholderTextColor="#aaa" 
       />
       <TextInput
         style={styles.input}
         placeholder="location"
         value={location}
         onChangeText={(int) => setLocation(int)}
+        placeholderTextColor="#aaa" 
       />
-      <Button title="Send" onPress={handleCreate} />
+      </View>
+      <View style={styles.spaceFlex}>
+
+      </View>
+      <TouchableOpacity
+        style={[styles.button]}
+        onPress={handleCreate}
+      >
+        <Text style={styles.buttonText}>Create</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -45,30 +58,52 @@ function CreateStore({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    padding: 16,
+    marginTop: 20,
+    padding: 20,
+  },
+  formFlex: {
+    flex: 4,
+  },
+  spaceFlex: {
+    flex: 5,
   },
   title: {
-    fontSize: 24,
+    fontSize: 34,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginLeft: 50
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    height: 50,
+    paddingHorizontal: 23,
+    borderColor: "gray",
+    backgroundColor: "#EBECF0",
+    borderRadius: 8,
     borderWidth: 1,
     marginBottom: 12,
     padding: 8,
+    color: "#000",
   },
   header: {
+    flex: 2,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'start',
     marginBottom: 16,
+    alignItems: "center",
   },
   backText: {
     fontSize: 18,
-    color: 'blue',
-    textDecorationLine: 'underline',
+    color: "#5db075",
+  },
+  button: {
+    marginTop: 50,
+    backgroundColor: "#5db075",
+    padding: 10,
+    borderRadius: 20,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 18,
   },
 });
 
