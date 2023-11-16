@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 import {
   View,
@@ -8,20 +8,47 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Axios } from "../helpers/axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function LoginPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = () => {
-    console.log("Login...");
-    navigation.navigate("CreateStore");
+  const handleLogin = async () => {
+    try {
+      const {data} = await Axios({
+        method: "post",
+        url: "/login",
+        data: {
+          email,
+          password
+        }
+      })
+      // console.log(data)
+      await AsyncStorage.setItem("access_token", data.access_token)
+      navigation.navigate("CreateStore");
+    } catch (error) {
+      console.log(error.response.data)
+    }
   };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  useEffect(() => {
+    AsyncStorage.getItem("access_token")
+    .then((result) => {
+      if (result) {
+        navigation.navigate("ProfilePage")
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  })
 
   return (
     <View style={styles.container}>

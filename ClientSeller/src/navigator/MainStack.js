@@ -10,9 +10,9 @@ function MainStack() {
     const Stack = createNativeStackNavigator()
   return (
     <Stack.Navigator screenOptions={{headerShown:false}}>
-        <Stack.Screen name="ProfilePage" component={ProfilePage}></Stack.Screen>
-        <Stack.Screen name="LoginPage" component={LoginPage}></Stack.Screen>
         <Stack.Screen name="SignUpPage" component={SignUpPage}></Stack.Screen>
+        <Stack.Screen name="LoginPage" component={LoginPage}></Stack.Screen>
+        <Stack.Screen name="ProfilePage" component={ProfilePage}></Stack.Screen>
         <Stack.Screen name="CreateFood" component={CreateFood}></Stack.Screen>
         <Stack.Screen name="CreateStore" component={CreateStore}></Stack.Screen>
     </Stack.Navigator>

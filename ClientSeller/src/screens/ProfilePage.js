@@ -1,9 +1,44 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import ProductCard from "../components/ProductCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Axios } from "../helpers/axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function ProfilePage() {
-    const [products, setProducts] = useState(["","","","","","","",""])
+
+function ProfilePage({navigation}) {
+    const [products, setProducts] = useState([])
+    const [profile, setProfile] = useState(null)
+    
+    async function fetchStore() {
+        try {
+            const access_token = await AsyncStorage.getItem("access_token")
+            const {data} = await Axios({
+                method: "get",
+                url: "/stores/users",
+                headers: {
+                    access_token: access_token
+                }
+            })
+            setProfile({
+                name: data.name,
+                address: data.address
+            })
+            setProducts(data.Food)
+        } catch (error) {
+            console.log(error.response.data)
+        }
+    }
+    
+    async function handleLogout() {
+        await AsyncStorage.clear()
+        navigation.navigate("LoginPage")
+    }
+
+    useEffect(() => {
+
+        fetchStore()
+    }, [])
+
     return (
         <>
             <View style={styles.header}>
@@ -13,17 +48,23 @@ function ProfilePage() {
                     <Text style={styles.navItem}>
                         Profile
                     </Text>
-                    <Text style={styles.navItem}>
-                        Logout
-                    </Text>
+                    <TouchableOpacity 
+                    onPress={handleLogout}
+                    style={styles.navItem}>
+                        <Text style={styles.logout}>
+                            Logout
+                        </Text>
+                    </TouchableOpacity>
                 </View>
                 <Text style={styles.title}>
-                    Nama Toko
+                    {profile ? profile.name : "Loading Profile"}
                 </Text>
                 <Text style={styles.subTitle}>
-                    Alamat toko: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                    {profile ? profile.address : ""}
                 </Text>
-                <TouchableOpacity style={styles.addButton}>
+                <TouchableOpacity 
+                onPress={() => navigation.navigate("CreateFood")}
+                style={styles.addButton}>
                     <Text style={styles.buttonText}>
                         Add Product
                     </Text>
@@ -33,6 +74,7 @@ function ProfilePage() {
                 {products.map((el, index) => {
                     return (
                         <ProductCard
+                        product={el}
                         key={index}
                         />
                     )
@@ -57,6 +99,13 @@ const styles = StyleSheet.create({
         paddingBottom: 9
     },
     navItem: {
+        flex: 1,
+        textAlign: "center",
+        color: "white",
+        fontWeight: "600",
+        fontSize: 17,
+    },
+    logout: {
         flex: 1,
         textAlign: "center",
         color: "white",

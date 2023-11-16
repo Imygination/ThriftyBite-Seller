@@ -8,7 +8,7 @@ function CreateStore({ navigation }) {
 
   const handleCreate = () => {
     console.log('Create Store...');
-    navigation.navigate('CreateFood');
+    navigation.navigate('ProfilePage');
   };
 
   return (

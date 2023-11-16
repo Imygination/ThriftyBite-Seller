@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { Entypo } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Axios } from "../helpers/axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function SignUpPage({ navigation }) {
   const [username, setUsername] = useState('');
@@ -10,14 +12,41 @@ function SignUpPage({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSignUp = () => {
-    console.log('Signing up...');
-    navigation.navigate('LoginPage');
+  const handleSignUp = async () => {
+    try {
+      const {data} = await Axios({
+        method: "post",
+        url: "/register",
+        data: {
+          username,
+          email,
+          password,
+          phoneNumber,
+          role: "seller"
+        }
+      })
+      // console.log(data)
+      navigation.navigate('LoginPage');
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  useEffect(() => {
+    AsyncStorage.getItem("access_token")
+      .then((result) => {
+        if (result) {
+          navigation.navigate("ProfilePage")
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
 
   return (
     <View style={styles.container}>
