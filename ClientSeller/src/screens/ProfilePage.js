@@ -5,7 +5,7 @@ import { Axios } from "../helpers/axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-function ProfilePage() {
+function ProfilePage({navigation}) {
     const [products, setProducts] = useState([])
     const [profile, setProfile] = useState(null)
     
@@ -29,6 +29,10 @@ function ProfilePage() {
         }
     }
     
+    async function handleLogout() {
+        await AsyncStorage.clear()
+        navigation.navigate("LoginPage")
+    }
 
     useEffect(() => {
 
@@ -44,9 +48,13 @@ function ProfilePage() {
                     <Text style={styles.navItem}>
                         Profile
                     </Text>
-                    <Text style={styles.navItem}>
-                        Logout
-                    </Text>
+                    <TouchableOpacity 
+                    onPress={handleLogout}
+                    style={styles.navItem}>
+                        <Text style={styles.logout}>
+                            Logout
+                        </Text>
+                    </TouchableOpacity>
                 </View>
                 <Text style={styles.title}>
                     {profile ? profile.name : "Loading Profile"}
@@ -89,6 +97,13 @@ const styles = StyleSheet.create({
         paddingBottom: 9
     },
     navItem: {
+        flex: 1,
+        textAlign: "center",
+        color: "white",
+        fontWeight: "600",
+        fontSize: 17,
+    },
+    logout: {
         flex: 1,
         textAlign: "center",
         color: "white",

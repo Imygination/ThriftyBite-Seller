@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 import {
   View,
@@ -37,6 +37,18 @@ function LoginPage({ navigation }) {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  useEffect(() => {
+    AsyncStorage.getItem("access_token")
+    .then((result) => {
+      if (result) {
+        navigation.navigate("ProfilePage")
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  })
 
   return (
     <View style={styles.container}>
