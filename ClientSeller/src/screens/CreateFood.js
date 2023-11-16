@@ -114,6 +114,7 @@ function CreateFood({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Stock"
+        inputMode='numeric'
         value={stock}
         onChangeText={(int) => setStock(int)}
         placeholderTextColor="#aaa" 
@@ -121,6 +122,7 @@ function CreateFood({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Price"
+        inputMode='numeric'
         value={price}
         onChangeText={(int) => setPrice(int)}
         placeholderTextColor="#aaa" 
