@@ -62,7 +62,9 @@ function ProfilePage({navigation}) {
                 <Text style={styles.subTitle}>
                     {profile ? profile.address : ""}
                 </Text>
-                <TouchableOpacity style={styles.addButton}>
+                <TouchableOpacity 
+                onPress={() => navigation.navigate("CreateFood")}
+                style={styles.addButton}>
                     <Text style={styles.buttonText}>
                         Add Product
                     </Text>

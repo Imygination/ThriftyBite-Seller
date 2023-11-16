@@ -1,18 +1,34 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import axios from "axios";
 
 function CreateFood({ navigation }) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [stock, setStock] = useState('');
   const [price, setPrice] = useState('');
+  const [image, setImage] = useState(null);
 
   const handleCreate = () => {
     console.log('Create Food...');
   };
 
-  const handleUploadImage = () => {
-    console.log('Upload Image...');
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        quality: 1,
+      });
+  
+      console.log(result);
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.log(error.response.data)
+    }
   };
   
 
@@ -57,7 +73,7 @@ function CreateFood({ navigation }) {
       <View style={styles.spaceFlex}>
       <TouchableOpacity
         style={[styles.buttonImage]}
-        onPress={handleUploadImage}
+        onPress={pickImage}
       >
         <Text style={styles.buttonText}>Upload Image</Text>
       </TouchableOpacity>
