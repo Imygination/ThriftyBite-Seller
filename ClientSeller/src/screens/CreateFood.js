@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import axios from "axios";
+import {Axios} from "../helpers/axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function CreateFood({ navigation }) {
   const [name, setName] = useState('');
@@ -9,25 +10,80 @@ function CreateFood({ navigation }) {
   const [stock, setStock] = useState('');
   const [price, setPrice] = useState('');
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("")
+  const [loadingImage, setLoadingImage] = useState(true)
 
-  const handleCreate = () => {
-    console.log('Create Food...');
+  const handleCreate = async () => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token")
+      console.log({
+        name,
+        description,
+        stock,
+        price,
+        imageUrl
+      })
+      const {data} = await Axios({
+        method: "post",
+        url: "/foods",
+        data: {
+          name: name,
+          description: description,
+          stock: stock,
+          price: price,
+          imageUrl: imageUrl
+        },
+        headers: {
+          access_token: access_token
+        }
+      })
+      navigation.navigate("ProfilePage")
+    } catch (error) {
+      console.log(error.response.data)
+    }
   };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
+    setLoadingImage(true)
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         quality: 1,
       });
-  
-      console.log(result);
+      let formData = new FormData()
       if (!result.canceled) {
         setImage(result.assets[0].uri);
+
+         // ImagePicker saves the taken photo to disk and returns a local URI to it
+        let localUri = result.assets[0].uri;
+        let filename = localUri.split('/').pop();
+
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+
+        // Upload the image using the fetch and FormData APIs
+        let formData = new FormData();
+        // Assume "photo" is the name of the form field the server expects
+        formData.append('image', { uri: localUri, name: filename, type });
+
+        const {data} = await Axios({
+          method: "post",
+          url: "/foods/images",
+          data: formData,
+          headers: {
+            'content-type': 'multipart/form-data',
+          },
+        })
+
+        console.log("image uploaded")
+        setImageUrl(data.url)
       }
+      setLoadingImage(false)
     } catch (error) {
-      console.log(error.response.data)
+      console.log(error)
+      setLoadingImage(false)
     }
   };
   
