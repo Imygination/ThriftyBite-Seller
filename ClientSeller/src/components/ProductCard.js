@@ -1,19 +1,20 @@
 import { View, Image, Text, StyleSheet } from "react-native";
-function ProductCard() {
+function ProductCard(props) {
+    const {product} = props
     return (
         <View style={styles.productCard}>
             <Image
             source={{
-                uri: "https://placekitten.com/g/200/300"
+                uri: product.imageUrl
             }}
             style={styles.image}
             />
             <View style={styles.cardContent}>
                 <Text style={styles.cardTitle}>
-                    Product 
+                    {product.name} 
                 </Text>
                 <Text>
-                    Stock: 5
+                    Stock: {product.stock}
                 </Text>
             </View>
         </View>
