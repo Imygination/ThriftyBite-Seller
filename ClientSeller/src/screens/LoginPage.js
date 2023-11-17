@@ -28,7 +28,7 @@ function LoginPage({ navigation }) {
       })
       // console.log(data)
       await AsyncStorage.setItem("access_token", data.access_token)
-      navigation.navigate("CreateStore");
+      navigation.navigate("ProfilePage");
     } catch (error) {
       console.log(error.response.data)
     }

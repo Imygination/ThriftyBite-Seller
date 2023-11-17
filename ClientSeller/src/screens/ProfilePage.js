@@ -25,6 +25,9 @@ function ProfilePage({navigation}) {
             })
             setProducts(data.Food)
         } catch (error) {
+            if(error.response.data.message === "Store not found"){
+                navigation.navigate("CreateStore")
+            }
             console.log(error.response.data)
         }
     }
@@ -35,7 +38,7 @@ function ProfilePage({navigation}) {
     }
 
     useEffect(() => {
-
+        
         fetchStore()
     }, [])
 

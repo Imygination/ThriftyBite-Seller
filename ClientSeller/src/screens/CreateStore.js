@@ -1,59 +1,124 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput,StyleSheet, TouchableOpacity } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import { Axios } from "../helpers/axios";
 
 function CreateStore({ navigation }) {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [location, setLocation] = useState('');
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [region, setRegion] = useState({
+    latitude: -6.910599832880549,
+    longitude: 107.62152321144464,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
 
-  const handleCreate = () => {
-    console.log('Create Store...');
-    navigation.navigate('ProfilePage');
+  const onRegionChange = (region) => {
+    // console.log(region, "<<<< REGION CHANGE");
+    setRegion(region);
+  };
+
+  const [markerOne, setMarkerOne] = useState({
+    coordinate: {
+      latitude: 37.76635667913945,
+      longitude: -122.4444704181157,
+    },
+    title: `CONTOH 1`,
+    description: "CONTOH DESCRIPTION",
+  });
+
+  const handleCreate = async () => {
+    try {
+      const token = await AsyncStorage.getItem("access_token");
+      const { data } = await Axios({
+        method: "post",
+        url: "/stores",
+        data: {
+          name,
+          address,
+          latitude: markerOne.coordinate.latitude,
+          longitude: markerOne.coordinate.longitude,
+        },
+        headers: {
+          access_token: token,
+        },
+      });
+      // console.log(data);
+      navigation.navigate("ProfilePage");
+    } catch (error) {
+      console.log(error.response.data);
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity>
-          <Text style={styles.backText} onPress={() => navigation.goBack()}>Back</Text>
+          <Text style={styles.backText} onPress={() => navigation.goBack()}>
+            Back
+          </Text>
         </TouchableOpacity>
         <Text style={styles.title}>Create Store</Text>
       </View>
       <View style={styles.formFlex}>
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        value={name}
-        onChangeText={(text) => setName(text)}
-        placeholderTextColor="#aaa" 
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Address"
-        value={address}
-        onChangeText={(text) => setAddress(text)}
-        placeholderTextColor="#aaa" 
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="location"
-        value={location}
-        onChangeText={(int) => setLocation(int)}
-        placeholderTextColor="#aaa" 
-      />
-      </View>
-      <View style={styles.spaceFlex}>
+        <TextInput
+          style={styles.input}
+          placeholder="Name"
+          value={name}
+          onChangeText={(text) => setName(text)}
+          placeholderTextColor="#aaa"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Address"
+          value={address}
+          onChangeText={(text) => setAddress(text)}
+          placeholderTextColor="#aaa"
+        />
+        <View style={{ marginBottom: 10 }}>
+          <Text>
+            REGION LatLong : {region.latitude} {region.longitude}
+          </Text>
+          <Text>
+            Marker One LatLong : {markerOne.coordinate.latitude}{" "}
+            {markerOne.coordinate.longitude}
+          </Text>
+        </View>
 
+        <MapView
+          style={styles.map}
+          region={region}
+          // onRegionChange={onRegionChange}
+          onPress={(e) => {
+            console.log(e.nativeEvent, "<<<<<< INI LOKASI NYA");
+            setMarkerOne({
+              ...markerOne,
+              coordinate: e.nativeEvent.coordinate,
+            });
+          }}
+        >
+          <Marker
+            onPress={(e) => console.log(e.nativeEvent, "MARKERR NYA DIPIJITT")}
+            coordinate={markerOne.coordinate}
+            title={markerOne.title}
+            description={markerOne.description}
+          />
+        </MapView>
       </View>
-      <TouchableOpacity
-        style={[styles.button]}
-        onPress={handleCreate}
-      >
+      <View style={styles.spaceFlex}></View>
+      <TouchableOpacity style={[styles.button]} onPress={handleCreate}>
         <Text style={styles.buttonText}>Create</Text>
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -69,8 +134,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 34,
-    fontWeight: 'bold',
-    marginLeft: 50
+    fontWeight: "bold",
+    marginLeft: 50,
   },
   input: {
     height: 50,
@@ -85,8 +150,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flex: 2,
-    flexDirection: 'row',
-    justifyContent: 'start',
+    flexDirection: "row",
+    justifyContent: "start",
     marginBottom: 16,
     alignItems: "center",
   },
@@ -104,6 +169,10 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 18,
+  },
+  map: {
+    width: "100%",
+    height: "100%",
   },
 });
 
