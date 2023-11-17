@@ -3,6 +3,8 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'rea
 import * as ImagePicker from 'expo-image-picker';
 import {Axios} from "../helpers/axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from "react-redux";
+import { FETCH_PROFILE, fetchServer } from '../../store/actions/actionCreators';
 
 function CreateFood({ navigation }) {
   const [name, setName] = useState('');
@@ -12,17 +14,18 @@ function CreateFood({ navigation }) {
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("")
   const [loadingImage, setLoadingImage] = useState(true)
+  const dispatch = useDispatch()
 
   const handleCreate = async () => {
     try {
       const access_token = await AsyncStorage.getItem("access_token")
-      console.log({
-        name,
-        description,
-        stock,
-        price,
-        imageUrl
-      })
+      // console.log({
+      //   name,
+      //   description,
+      //   stock,
+      //   price,
+      //   imageUrl
+      // })
       const {data} = await Axios({
         method: "post",
         url: "/foods",
@@ -37,6 +40,7 @@ function CreateFood({ navigation }) {
           access_token: access_token
         }
       })
+      dispatch(fetchServer("/stores/users", FETCH_PROFILE))
       navigation.navigate("ProfilePage")
     } catch (error) {
       console.log(error.response.data)
