@@ -12,6 +12,7 @@ import { Axios } from "../helpers/axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from "react-redux";
 import { FETCH_PROFILE, fetchServer } from "../../store/actions/actionCreators";
+import ToastManager, { Toast } from "toastify-react-native";
 
 
 function LoginPage({ navigation }) {
@@ -21,6 +22,10 @@ function LoginPage({ navigation }) {
   const dispatch = useDispatch()
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      Toast.error("Enter email and password")
+      return
+    }
     try {
       const {data} = await Axios({
         method: "post",
@@ -39,9 +44,11 @@ function LoginPage({ navigation }) {
               return
           }
         })
+      Toast.success("Login successfull")
       navigation.navigate("ProfilePage");
     } catch (error) {
       console.log(error.response.data)
+      Toast.error(error.response.data.message)
     }
   };
 
@@ -63,6 +70,9 @@ function LoginPage({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <ToastManager 
+      width={"90%"}
+      />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Entypo name="cross" size={30} color="gray" />
