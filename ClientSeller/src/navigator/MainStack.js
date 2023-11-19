@@ -5,6 +5,8 @@ import SignUpPage from "../screens/SignUpPage";
 import CreateFood from "../screens/CreateFood";
 import CreateStore from "../screens/CreateStore";
 import ProfilePage from "../screens/ProfilePage";
+import ChatScreen from "../screens/ChatScreen";
+import ContactScreen from "../screens/ContactScreen";
 
 function MainStack() {
     const Stack = createNativeStackNavigator()
@@ -15,6 +17,8 @@ function MainStack() {
         <Stack.Screen name="ProfilePage" component={ProfilePage}></Stack.Screen>
         <Stack.Screen name="CreateFood" component={CreateFood}></Stack.Screen>
         <Stack.Screen name="CreateStore" component={CreateStore}></Stack.Screen>
+        <Stack.Screen name="ContactScreen" component={ContactScreen}></Stack.Screen>
+        <Stack.Screen name="ChatScreen" component={ChatScreen}></Stack.Screen>
     </Stack.Navigator>
   )
 }

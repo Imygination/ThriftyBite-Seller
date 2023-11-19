@@ -53,16 +53,23 @@ function ProfilePage({navigation}) {
         <>
             <View style={styles.header}>
                 <View style={styles.navbar}>
-                    <Text style={styles.navItem}>
-                    </Text>
-                    <Text style={styles.navItem}>
-                        Profile
-                    </Text>
                     <TouchableOpacity 
                     onPress={handleLogout}
                     style={styles.navItem}>
                         <Text style={styles.logout}>
                             Logout
+                        </Text>
+                    </TouchableOpacity>
+                    <Text style={styles.navItem}>
+                        Profile
+                    </Text>
+                    <TouchableOpacity 
+                    onPress={() => {
+                        navigation.navigate("ContactScreen")
+                    }}
+                    style={styles.navItem}>
+                        <Text style={styles.logout}>
+                            Chat
                         </Text>
                     </TouchableOpacity>
                 </View>
