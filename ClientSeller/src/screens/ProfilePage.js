@@ -42,24 +42,40 @@ function ProfilePage({navigation}) {
     }
 
     useEffect(() => {
-        dispatch(fetchServer("/stores/users", FETCH_PROFILE))
         // fetchStore()
+        if (!profile.name) {
+            dispatch(fetchServer("/stores/users", FETCH_PROFILE))
+                .catch((error) => {
+                    if (error.response.data.message === "Store not found") {
+                        navigation.navigate("CreateStore")
+                        return
+                    }
+                })
+            console.log(profile)
+        }
     }, [])
 
     return (
         <>
             <View style={styles.header}>
                 <View style={styles.navbar}>
-                    <Text style={styles.navItem}>
-                    </Text>
-                    <Text style={styles.navItem}>
-                        Profile
-                    </Text>
                     <TouchableOpacity 
                     onPress={handleLogout}
                     style={styles.navItem}>
                         <Text style={styles.logout}>
                             Logout
+                        </Text>
+                    </TouchableOpacity>
+                    <Text style={styles.navItem}>
+                        Profile
+                    </Text>
+                    <TouchableOpacity 
+                    onPress={() => {
+                        navigation.navigate("ContactScreen")
+                    }}
+                    style={styles.navItem}>
+                        <Text style={styles.logout}>
+                            Chat
                         </Text>
                     </TouchableOpacity>
                 </View>
