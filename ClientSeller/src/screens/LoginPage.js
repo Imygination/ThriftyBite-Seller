@@ -33,9 +33,15 @@ function LoginPage({ navigation }) {
       // console.log(data)
       await AsyncStorage.setItem("access_token", data.access_token)
       dispatch(fetchServer("/stores/users", FETCH_PROFILE))
+        .catch((error) => {
+          if (error.response.data.message === "Store not found") {
+              navigation.navigate("CreateStore")
+              return
+          }
+        })
       navigation.navigate("ProfilePage");
     } catch (error) {
-      console.log(error)
+      console.log(error.response.data)
     }
   };
 

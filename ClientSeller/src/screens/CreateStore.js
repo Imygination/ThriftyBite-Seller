@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { Axios } from "../helpers/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { FETCH_PROFILE, fetchServer } from "../../store/actions/actionCreators";
 
 function CreateStore({ navigation }) {
   const [name, setName] = useState("");
@@ -19,7 +21,7 @@ function CreateStore({ navigation }) {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
-
+  const dispatch = useDispatch()
   const onRegionChange = (region) => {
     // console.log(region, "<<<< REGION CHANGE");
     setRegion(region);
@@ -51,6 +53,7 @@ function CreateStore({ navigation }) {
         },
       });
       // console.log(data);
+      dispatch(fetchServer("/stores/users", FETCH_PROFILE))
       navigation.navigate("ProfilePage");
     } catch (error) {
       console.log(error.response.data);
@@ -60,11 +63,6 @@ function CreateStore({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
-          <Text style={styles.backText} onPress={() => navigation.goBack()}>
-            Back
-          </Text>
-        </TouchableOpacity>
         <Text style={styles.title}>Create Store</Text>
       </View>
       <View style={styles.formFlex}>

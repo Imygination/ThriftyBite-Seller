@@ -7,7 +7,7 @@ function ChatScreen() {
     const profile = useSelector((state) => state.profile)
     const navigation = useNavigation()
     const {conversationId, recipientId} = useRoute().params
-    console.log(conversationId)
+    // console.log(conversationId)
     const me = {
         id: profile.id, //storeid
         name: profile.name,

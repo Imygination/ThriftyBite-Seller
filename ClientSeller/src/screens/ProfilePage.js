@@ -45,6 +45,12 @@ function ProfilePage({navigation}) {
         // fetchStore()
         if (!profile.name) {
             dispatch(fetchServer("/stores/users", FETCH_PROFILE))
+                .catch((error) => {
+                    if (error.response.data.message === "Store not found") {
+                        navigation.navigate("CreateStore")
+                        return
+                    }
+                })
             console.log(profile)
         }
     }, [])
