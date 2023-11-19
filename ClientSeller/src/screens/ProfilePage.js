@@ -42,8 +42,11 @@ function ProfilePage({navigation}) {
     }
 
     useEffect(() => {
-        dispatch(fetchServer("/stores/users", FETCH_PROFILE))
         // fetchStore()
+        if (!profile.name) {
+            dispatch(fetchServer("/stores/users", FETCH_PROFILE))
+            console.log(profile)
+        }
     }, [])
 
     return (

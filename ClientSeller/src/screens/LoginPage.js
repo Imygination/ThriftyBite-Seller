@@ -10,11 +10,15 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Axios } from "../helpers/axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from "react-redux";
+import { FETCH_PROFILE, fetchServer } from "../../store/actions/actionCreators";
+
 
 function LoginPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch()
 
   const handleLogin = async () => {
     try {
@@ -28,9 +32,10 @@ function LoginPage({ navigation }) {
       })
       // console.log(data)
       await AsyncStorage.setItem("access_token", data.access_token)
+      dispatch(fetchServer("/stores/users", FETCH_PROFILE))
       navigation.navigate("ProfilePage");
     } catch (error) {
-      console.log(error.response.data)
+      console.log(error)
     }
   };
 
