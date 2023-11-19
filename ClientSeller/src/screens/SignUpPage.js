@@ -4,6 +4,7 @@ import { Entypo } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Axios } from "../helpers/axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ToastManager, { Toast } from "toastify-react-native";
 
 function SignUpPage({ navigation }) {
   const [username, setUsername] = useState('');
@@ -13,6 +14,10 @@ function SignUpPage({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignUp = async () => {
+    if (!username || !email || !password || !phoneNumber) {
+      Toast.error("Enter all form")
+      return
+    }
     try {
       const {data} = await Axios({
         method: "post",
@@ -28,7 +33,8 @@ function SignUpPage({ navigation }) {
       // console.log(data)
       navigation.navigate('LoginPage');
     } catch (error) {
-      console.log(error)
+      console.log(error.response.data)
+      Toast.error(error.response.data.message)
     }
   };
 
@@ -50,6 +56,9 @@ function SignUpPage({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <ToastManager 
+      width={"90%"}
+      />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Entypo name="cross" size={30} color="gray" />
@@ -81,6 +90,7 @@ function SignUpPage({ navigation }) {
         <TextInput
           style={styles.input}
           placeholder="Phone Number"
+          inputMode='numeric'
           value={phoneNumber}
           onChangeText={(text) => setPhoneNumber(text)}
           placeholderTextColor="#aaa" 

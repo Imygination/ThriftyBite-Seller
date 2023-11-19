@@ -11,6 +11,7 @@ import MapView, { Marker } from "react-native-maps";
 import { Axios } from "../helpers/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { FETCH_PROFILE, fetchServer } from "../../store/actions/actionCreators";
+import ToastManager, { Toast } from "toastify-react-native";
 
 function CreateStore({ navigation }) {
   const [name, setName] = useState("");
@@ -29,14 +30,18 @@ function CreateStore({ navigation }) {
 
   const [markerOne, setMarkerOne] = useState({
     coordinate: {
-      latitude: 37.76635667913945,
-      longitude: -122.4444704181157,
+      latitude: -6.910599832880549,
+      longitude: 107.62152321144464,
     },
     title: `CONTOH 1`,
     description: "CONTOH DESCRIPTION",
   });
 
   const handleCreate = async () => {
+    if (!name || !address) {
+      Toast.error("Enter all form")
+      return
+    }
     try {
       const token = await AsyncStorage.getItem("access_token");
       const { data } = await Axios({
@@ -57,11 +62,15 @@ function CreateStore({ navigation }) {
       navigation.navigate("ProfilePage");
     } catch (error) {
       console.log(error.response.data);
+      Toast.error(error.response.data.message)
     }
   };
 
   return (
     <View style={styles.container}>
+      <ToastManager 
+      width={"90%"}
+      />
       <View style={styles.header}>
         <Text style={styles.title}>Create Store</Text>
       </View>
