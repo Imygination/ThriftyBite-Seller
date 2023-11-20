@@ -7,6 +7,7 @@ import CreateStore from "../screens/CreateStore";
 import ProfilePage from "../screens/ProfilePage";
 import ChatScreen from "../screens/ChatScreen";
 import ContactScreen from "../screens/ContactScreen";
+import EditPage from "../screens/EditPage";
 
 function MainStack() {
     const Stack = createNativeStackNavigator()
@@ -19,6 +20,7 @@ function MainStack() {
         <Stack.Screen name="CreateStore" component={CreateStore}></Stack.Screen>
         <Stack.Screen name="ContactScreen" component={ContactScreen}></Stack.Screen>
         <Stack.Screen name="ChatScreen" component={ChatScreen}></Stack.Screen>
+        <Stack.Screen name="EditPage" component={EditPage}></Stack.Screen>
     </Stack.Navigator>
   )
 }
