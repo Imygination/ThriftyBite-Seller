@@ -1,8 +1,15 @@
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 function ProductCard(props) {
     const {product} = props
+    const navigation = useNavigation()
     return (
-        <View style={styles.productCard}>
+        <TouchableOpacity
+        onPress={() => {
+            navigation.navigate("EditPage", {product: product})
+        }}
+        style={styles.productCard}>
             <Image
             source={{
                 uri: product.imageUrl
@@ -17,7 +24,7 @@ function ProductCard(props) {
                     Stock: {product.stock}
                 </Text>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }
 
