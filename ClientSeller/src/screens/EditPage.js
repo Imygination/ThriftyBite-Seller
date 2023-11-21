@@ -63,6 +63,7 @@ function EditPage({ navigation }) {
                 <Text style={styles.title}>Edit Food</Text>
             </View>
             <View style={styles.formFlex}>
+                <Text style={styles.label}>Name</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Name"
@@ -70,6 +71,7 @@ function EditPage({ navigation }) {
                     onChangeText={(text) => setName(text)}
                     placeholderTextColor="#aaa"
                 />
+                <Text style={styles.label}>Description</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Description"
@@ -77,6 +79,7 @@ function EditPage({ navigation }) {
                     onChangeText={(text) => setDescription(text)}
                     placeholderTextColor="#aaa"
                 />
+                <Text style={styles.label}>Stock</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Stock"
@@ -85,6 +88,7 @@ function EditPage({ navigation }) {
                     onChangeText={(int) => setStock(int)}
                     placeholderTextColor="#aaa"
                 />
+                <Text style={styles.label}>Price</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Price"
@@ -164,6 +168,9 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 18,
     },
+    label:{
+    fontSize: 16,
+    }
 })
 
 export default EditPage
