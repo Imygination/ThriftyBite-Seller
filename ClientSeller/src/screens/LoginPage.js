@@ -10,13 +10,22 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Axios } from "../helpers/axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from "react-redux";
+import { FETCH_PROFILE, fetchServer } from "../../store/actions/actionCreators";
+import ToastManager, { Toast } from "toastify-react-native";
+
 
 function LoginPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch()
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      Toast.error("Enter email and password")
+      return
+    }
     try {
       const {data} = await Axios({
         method: "post",
@@ -28,9 +37,18 @@ function LoginPage({ navigation }) {
       })
       // console.log(data)
       await AsyncStorage.setItem("access_token", data.access_token)
+      dispatch(fetchServer("/stores/users", FETCH_PROFILE))
+        .catch((error) => {
+          if (error.response.data.message === "Store not found") {
+              navigation.navigate("CreateStore")
+              return
+          }
+        })
+      Toast.success("Login successfull")
       navigation.navigate("ProfilePage");
     } catch (error) {
       console.log(error.response.data)
+      Toast.error(error.response.data.message)
     }
   };
 
@@ -52,6 +70,9 @@ function LoginPage({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <ToastManager 
+      width={"90%"}
+      />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Entypo name="cross" size={30} color="gray" />

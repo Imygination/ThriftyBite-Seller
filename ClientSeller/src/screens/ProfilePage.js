@@ -3,12 +3,16 @@ import ProductCard from "../components/ProductCard";
 import { useEffect, useState } from "react";
 import { Axios } from "../helpers/axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from "react-redux";
+import { FETCH_PROFILE, fetchServer } from "../../store/actions/actionCreators";
 
 
 function ProfilePage({navigation}) {
-    const [products, setProducts] = useState([])
-    const [profile, setProfile] = useState(null)
-    
+    // const [products, setProducts] = useState([])
+    // const [profile, setProfile] = useState(null)
+    const profile = useSelector((state) => state.profile)
+    const products = useSelector((state) => state.products)
+    const dispatch = useDispatch()
     async function fetchStore() {
         try {
             const access_token = await AsyncStorage.getItem("access_token")
@@ -38,24 +42,40 @@ function ProfilePage({navigation}) {
     }
 
     useEffect(() => {
-        
-        fetchStore()
+        // fetchStore()
+        if (!profile.name) {
+            dispatch(fetchServer("/stores/users", FETCH_PROFILE))
+                .catch((error) => {
+                    if (error.response.data.message === "Store not found") {
+                        navigation.navigate("CreateStore")
+                        return
+                    }
+                })
+            console.log(profile)
+        }
     }, [])
 
     return (
         <>
             <View style={styles.header}>
                 <View style={styles.navbar}>
-                    <Text style={styles.navItem}>
-                    </Text>
-                    <Text style={styles.navItem}>
-                        Profile
-                    </Text>
                     <TouchableOpacity 
                     onPress={handleLogout}
                     style={styles.navItem}>
                         <Text style={styles.logout}>
                             Logout
+                        </Text>
+                    </TouchableOpacity>
+                    <Text style={styles.navItem}>
+                        Profile
+                    </Text>
+                    <TouchableOpacity 
+                    onPress={() => {
+                        navigation.navigate("ContactScreen")
+                    }}
+                    style={styles.navItem}>
+                        <Text style={styles.logout}>
+                            Chat
                         </Text>
                     </TouchableOpacity>
                 </View>
